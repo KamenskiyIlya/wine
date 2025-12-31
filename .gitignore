@@ -229,5 +229,5 @@ Thumbs.db
 poetry.lock
 pyproject.toml
 caps/
-wine.xlsx
+*.xlsx
 index.html
