@@ -3,6 +3,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 import datetime
+import pandas
 
 
 def get_winery_ages():
@@ -21,6 +22,13 @@ def get_winery_ages():
 		winery_ages = f'{delta_ages} лет'
 	return winery_ages
 
+
+def get_excel_data():
+	excel_data = pandas.read_excel('wine.xlsx', sheet_name='Лист1')
+	wines = excel_data.to_dict(orient='records')
+	return wines
+
+
 env = Environment(
 	loader=FileSystemLoader('.'),
 	autoescape=select_autoescape(['html', 'xml'])
@@ -29,7 +37,8 @@ env = Environment(
 template = env.get_template('template.html')
 
 rendered_page = template.render(
-	winery_ages=get_winery_ages()
+	winery_ages=get_winery_ages(),
+	wines = get_excel_data()
 )
 
 with open('index.html', 'w', encoding='utf8') as file:
