@@ -5,6 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 import datetime
 import pandas
 from pprint import pprint
+from collections import defaultdict
 
 
 def get_winery_ages():
@@ -28,15 +29,7 @@ def get_excel_data():
 	excel_data = pandas.read_excel('wine2.xlsx', sheet_name='Лист1', keep_default_na=False)
 	wines = excel_data.to_dict('records')
 
-	# формируем список существующих категорий
-	categories = []
-	for wine in wines:
-		categorie = wine.get('Категория')
-		categories.append(categorie)
-	categories = set(categories)
-
-	# формируем словарь необходимого вида
-	grouped_wines = {categorie:[] for categorie in categories}
+	grouped_wines = defaultdict(list)
 	for wine in wines:
 		grouped_wines[wine['Категория']].append(wine)
 	return grouped_wines
@@ -57,7 +50,7 @@ rendered_page = template.render(
 with open('index.html', 'w', encoding='utf8') as file:
 	file.write(rendered_page)
 
-server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-server.serve_forever()
+# server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
+# server.serve_forever()
 
-pprint(get_excel_data())
+pprint(get_excel_data(), indent=4)
