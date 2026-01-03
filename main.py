@@ -53,4 +53,3 @@ with open('index.html', 'w', encoding='utf8') as file:
 server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
 server.serve_forever()
 
-pprint(get_excel_data(), indent=4)
