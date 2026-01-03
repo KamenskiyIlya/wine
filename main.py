@@ -26,7 +26,7 @@ def get_winery_ages():
 
 
 def get_excel_data():
-	excel_data = pandas.read_excel('wine2.xlsx', sheet_name='Лист1', keep_default_na=False)
+	excel_data = pandas.read_excel('wine3.xlsx', sheet_name='Лист1', keep_default_na=False)
 	wines = excel_data.to_dict('records')
 
 	grouped_wines = defaultdict(list)
