@@ -125,6 +125,9 @@
             <div class="wine_v_1 text-center pb-4 pt-5">
             {% if wine.Картинка %}
               <img src="/images/{{wine.Картинка}}" alt="Image" class="img-fluid">
+              {% if wine.Акция == 'Выгодное предложение' %}
+              <img src="assets/profitable.png" style="width:10rem;height: 10rem;position:absolute;right: -20px;top: -20px;">
+              {% endif %}
             {% else %}
               <img src="https://dvmn.org/filer/canonical/1569944855/354/" alt="Image" class="img-fluid">
             {% endif %}
