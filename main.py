@@ -99,7 +99,7 @@ def main():
 
 	rendered_page = template.render(
 		winery_ages=get_winery_age(args.creation_year),
-		wines=get_excel_data(args.path, args.sheet_name)
+		all_wines=get_excel_data(args.path, args.sheet_name)
 	)
 
 	with open('index.html', 'w', encoding='utf8') as file:
