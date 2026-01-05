@@ -7,21 +7,32 @@ import pandas
 from collections import defaultdict
 
 
-def get_winery_ages():
-	creation_date = datetime.datetime(year=1913, month=1, day=1)
+def get_age(year):
+	creation_date = datetime.datetime(year=year, month=1, day=1)
 	now_date = datetime.datetime.now()
 	delta_ages = now_date.year - creation_date.year
-	if delta_ages % 100 == 11:
-		winery_ages = f'{delta_ages} лет'
-	elif delta_ages % 10 == 1:
-		winery_ages = f'{delta_ages} год'
-	elif delta_ages % 100 in [12, 13, 14]:
-		winery_ages = f'{delta_ages} лет'
-	elif delta_ages % 10 in [2, 3, 4]:
-		winery_ages = f'{delta_ages} года'
+	return delta_ages
+
+
+def get_word_for_years(age):
+	if age % 100 == 11:
+		age_word = 'лет'
+	elif age % 10 == 1:
+		age_word = 'год'
+	elif age % 100 in [12, 13, 14]:
+		age_word = 'лет'
+	elif age % 10 in [2, 3, 4]:
+		age_word = 'года'
 	else:
-		winery_ages = f'{delta_ages} лет'
-	return winery_ages
+		age_word = 'лет'
+	return age_word
+
+
+def get_winery_age(year=1913):
+	winery_age_number = get_age(year)
+	winery_age_word = get_word_for_years(winery_age_number)
+	winery_age = f'{winery_age_number} {winery_age_word}'
+	return winery_age
 
 
 def get_excel_data():
