@@ -58,7 +58,7 @@ def main():
 	template = env.get_template('template.html')
 
 	rendered_page = template.render(
-		winery_ages=get_winery_ages(),
+		winery_ages=get_winery_age(),
 		wines=get_excel_data()
 	)
 
