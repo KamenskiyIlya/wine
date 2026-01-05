@@ -2,9 +2,44 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from environs import Env
 import datetime
 import pandas
 from collections import defaultdict
+import configargparse
+
+
+def get_args_from_user():
+	parser = configargparse.ArgumentParser()
+	parser.add_argument(
+		'-p',
+		'--path',
+		env_var='EXCEL_PATH',
+		required=True,
+		type=str,
+		help='Пусть к excel файлу, '
+		'указывается вместе с именем и расширением файла.'
+	)
+	parser.add_argument(
+		'-s',
+		'--sheet_name',
+		env_var='SHEET_NAME',
+		default=0,
+		type=str,
+		help='Имя листа в excel файле. '
+		'Необходимо указывать, если в файле '
+		'больше одного листа.'
+	)
+	parser.add_argument(
+		'-y',
+		'--creation_year',
+		env_var='CREATION_YEAR',
+		default=1913,
+		type=int,
+		help='Год создания винодельни.'
+	)
+	args = parser.parse_args()
+	return args
 
 
 def get_age(year):
@@ -28,17 +63,17 @@ def get_word_for_years(age):
 	return age_word
 
 
-def get_winery_age(year=1913):
+def get_winery_age(year):
 	winery_age_number = get_age(year)
 	winery_age_word = get_word_for_years(winery_age_number)
 	winery_age = f'{winery_age_number} {winery_age_word}'
 	return winery_age
 
 
-def get_excel_data():
+def get_excel_data(path, sheet_name):
 	excel_data = pandas.read_excel(
-		'wine3.xlsx',
-		sheet_name='Лист1',
+		io=r'{}'.format(path),
+		sheet_name=sheet_name,
 		keep_default_na=False
 	)
 	wines = excel_data.to_dict('records')
@@ -55,11 +90,16 @@ def main():
 		autoescape=select_autoescape(['html', 'xml'])
 	)
 
+	env_params = Env()
+	env_params.read_env()
+
+	args = get_args_from_user()
+
 	template = env.get_template('template.html')
 
 	rendered_page = template.render(
-		winery_ages=get_winery_age(),
-		wines=get_excel_data()
+		winery_ages=get_winery_age(args.creation_year),
+		wines=get_excel_data(args.path, args.sheet_name)
 	)
 
 	with open('index.html', 'w', encoding='utf8') as file:
